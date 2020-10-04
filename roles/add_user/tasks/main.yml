@@ -1,0 +1,10 @@
+---
+- name: add new user
+  user:
+    name: james
+    shell: /bin/bash
+    create_home: true
+    append: yes
+    password: "{{ mypassword | password_hash('sha512') }}"
+    tags:
+    - add_user
