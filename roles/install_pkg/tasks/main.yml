@@ -1,9 +1,11 @@
 ---
 -   name: install default pakages
+    become: yes
     apt:
-      pkg:
+      package:
         - mc
         - htop
-      update.cache: yes
+      state: present
+      update_cache: yes
     tags:
       - install_pkg
