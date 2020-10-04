@@ -1,0 +1,9 @@
+---
+-   name: install default pakages
+    apt:
+      pkg:
+        - mc
+        - htop
+      update.cache: yes
+    tags:
+      - install_pkg

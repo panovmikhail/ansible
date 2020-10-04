@@ -1,0 +1,5 @@
+- hosts: all
+  remote_user: pi
+  roles:
+    - { role: add_user, tags: ["add_user"] }
+    - { role: install_pkg, tags: ["install_pkg"] }
