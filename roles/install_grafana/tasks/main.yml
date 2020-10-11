@@ -25,6 +25,6 @@
       - grafana 
     state: present
     update_cache: yes
-  notify: "Start Grafana server"
+  notify: "Start Grafana"
   tags:
     - install_grafana
