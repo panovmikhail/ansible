@@ -3,3 +3,4 @@
   roles:
     - { role: add_user, tags: ["add_user"] }
     - { role: install_pkg, tags: ["install_pkg"] }
+    - { role: install_grafana, tags: ["install_grafana"] }

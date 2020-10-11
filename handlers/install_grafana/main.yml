@@ -1,5 +1,0 @@
----
-- name: Enable the Grafana server
-  ansible.builtin.service:
-    name: grafana-server
-    state: restarted
