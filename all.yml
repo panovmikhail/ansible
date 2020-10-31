@@ -1,6 +1,7 @@
 - hosts: all
   remote_user: pi
   roles:
-    - { role: add_user, tags: ["add_user"] }
-    - { role: install_pkg, tags: ["install_pkg"] }
-    - { role: install_grafana, tags: ["install_grafana"] }
+#    - { role: add_user, tags: ["add_user"] }
+#    - { role: install_pkg, tags: ["install_pkg"] }
+#    - { role: install_grafana, tags: ["install_grafana"] }
+    - { role: install_docker, tags: ["install_docker"] }
