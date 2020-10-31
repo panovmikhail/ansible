@@ -6,6 +6,11 @@
     state: present
     validate_certs: false
 
+- name: update_cache
+  become: yes
+  apt:
+    update_cache: yes
+
 - name: Add Grafana repository [Debian/Ubuntu]
   become: yes
   apt_repository:
@@ -25,6 +30,11 @@
       - grafana 
     state: present
     update_cache: yes
-  notify: "Start Grafana"
+
+- name: restart and enable grafana server
+  service:
+    name: grafana-server
+    state: restarted
+    enabled: yes
   tags:
     - install_grafana

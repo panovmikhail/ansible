@@ -1,0 +1,39 @@
+---
+- name: get apt-key docker
+  become: yes
+  apt_key: 
+    url: https://download.docker.com/linux/raspbian/gpg
+    state: present
+
+- name: Add docker repository [Debian/Ubuntu]
+  become: yes
+  apt_repository:
+    repo: deb https://download.docker.com/linux/raspbian/ buster stable
+    state: present
+    update_cache: yes
+
+- name: update_cache
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: install_dependencys
+  become: yes
+  apt:
+    pkg:
+    - apt-transport-https
+    - ca-certificates 
+    - curl
+    - gnupg-agent
+    - software-properties-common
+    update_cache: yes
+
+- name: install_docker
+  become: yes
+  apt:
+    pkg:
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io
+    state: present
+    update_cache: yes
