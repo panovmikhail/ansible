@@ -1,0 +1,10 @@
+---
+ansible_sudo_pass: sudo password
+
+user_add: 
+  - user1
+  - user2
+
+password:
+  user1: password
+  user2: password
