@@ -1,0 +1,48 @@
+---
+###run docker container
+- name: Using bash pull new image
+  shell: |
+    docker login -u "{{ CI_REGISTRY_USER }}" -p "{{ CI_REGISTRY_PASSWORD }}" {{ CI_REGISTRY }}
+    docker pull {{ CI_REGISTRY }}/{{ CD_PROJECT_GROUP_NAME }}/{{ CD_PROJECT_NAME }}:build.{{ CI_PIPELINE_ID }}
+
+- name: Using bash stop and rm old container
+  shell: |
+    docker stop {{ CD_PROJECT_NAME }}
+    docker rm {{ CD_PROJECT_NAME }}
+  ignore_errors: true
+
+- name: Docker run
+  shell: docker run -d --restart always -p {{ CD_PORT }}:80 --name {{ CD_PROJECT_NAME }} --env-file {{ CD_PATH }} gitlab.ru/{{ CD_PROJECT_GROUP_NAME }}/{{ CD_PROJECT_NAME }}:build.{{ CI_PIPELINE_ID }}
+
+- name: Using bash remove old image
+  shell: docker rmi $(docker images {{ CI_REGISTRY }}/{{ CD_PROJECT_GROUP_NAME }}/{{ CD_PROJECT_NAME }} -q)
+  ignore_errors: true
+
+- name: Check that you can connect (GET) to a page and it returns a status 200
+  uri:
+    url: "http://{{ inventory_hostname }}:{{ CD_PORT }}"
+    method: GET
+  register: _result
+  until: _result.status == 200
+  retries: 84
+  delay: 5
+  ignore_errors: true
+
+- name: Show output log contaner app
+  shell: docker logs {{ CD_PROJECT_NAME }} | tail -n 50
+  when: _result.status == -1
+  register: outputapp
+
+- name: Output docker container
+  debug:
+    msg: "{{ outputapp.stdout_lines }}"
+  when: _result.status == -1
+
+- name: Stop deploy
+  fail:
+    msg: Deploy can't be continuous, see log output ^
+  when: _result.status == -1
+
+- name: Show deploy server app
+  debug:
+    msg: Application has been deployed on http://{{ inventory_hostname }}:{{ CD_PORT }}
